@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import Home from "./landing/home/Home";
+import Login from "./landing/login/Login";
+import Profile from "./landing/profile/Profile";
+import Register from "./landing/register/Register";
+import {  Routes, Route, Navigate } from "react-router-dom";
+import React, {Fragment} from 'react';
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+
+
 
 function App() {
+  const { user } = useContext(AuthContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <Routes>
+          <Route path="/" element={user ? <Home/> : <Login/>}></Route>
+          <Route path='/home' element={<Home/>}></Route>
+          <Route path='/profile' element={<Profile/>}></Route>
+          <Route path='/register' element={<Register/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
+
+
+{/* 
+          <Route path="/login" element={user ? <Navigate to='/login'/> : <Login/>}></Route>
+          <Route path="/register" element={user ? <Navigate to='/register'/> : <Register/>}></Route> */}
+
+{/* 
+          <Route path="/Register" element={<Register/>}></Route>
+          <Route path="/Home" element={<Home/>}></Route> */}
+          <Route path="/Profile/:username" element={<Profile/>}></Route>  
+        </Routes>
+
+    </>
   );
 }
 
