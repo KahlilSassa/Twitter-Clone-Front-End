@@ -1,6 +1,7 @@
 import "./rightbar.css";
 import { Users } from "../../dummyData";
 import Online from "../online/Online";
+import { TwitterTweetEmbed} from "react-twitter-embed";
 
 export default function Rightbar({ user }) {
   // const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -9,7 +10,7 @@ export default function Rightbar({ user }) {
     return (
       <>
         <img className="rightbarAd" src="assets/ad.png" alt="" />
-        <h4 className="rightbarTitle">Online Friends</h4>
+        <h1 className="rightbarTitle">Trending</h1>
         <ul className="rightbarFriendList">
           {Users.map((u) => (
             <Online key={u.id} user={u} />
@@ -22,6 +23,10 @@ export default function Rightbar({ user }) {
   const ProfileRightbar = () => {
     return (
       <>
+          <TwitterTweetEmbed
+          sourceType="profile"
+          tweetId={"1509613074260672513"}/>
+
         <h4 className="rightbarTitle">User information</h4>
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
@@ -75,7 +80,8 @@ export default function Rightbar({ user }) {
             />
             <span className="rightbarFollowingName">Meghan L.</span>
           </div>
-        </div>
+      </div>
+        
       </>
     );
   };

@@ -4,7 +4,18 @@ import "./feed.css";
 import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { AuthContext } from "../../context/AuthContext";
-
+import {
+  TwitterTimelineEmbed,
+  TwitterShareButton,
+  TwitterFollowButton,
+  TwitterHashtagButton,
+  TwitterMentionButton,
+  TwitterTweetEmbed,
+  TwitterMomentShare,
+  TwitterDMButton,
+  TwitterVideoEmbed,
+  TwitterOnAirButton,
+} from "react-twitter-embed";
 
 export default function Feed({username}) {
   const [posts, setPosts] = useState([]);
@@ -54,7 +65,6 @@ export default function Feed({username}) {
           <Post key={post._id} post={post} handleDeleteSubmit={handleDeleteSubmit} />
         ))}
       </div>
-
       
     </div>
   );

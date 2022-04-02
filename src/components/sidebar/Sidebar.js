@@ -10,6 +10,8 @@ import EventIcon from '@mui/icons-material/Event';
 import SchoolIcon from '@mui/icons-material/School';
 import { Users } from "../../dummyData";
 import CloseFriend from "../closefriend/CloseFriend";
+import { TwitterTweetEmbed} from "react-twitter-embed";
+
 
 export default function Sidebar() {
   return (
@@ -60,6 +62,9 @@ export default function Sidebar() {
             <CloseFriend key={u.id} user={u} />
           ))}
         </ul>
+        <TwitterTweetEmbed
+          sourceType="profile"
+          tweetId={"1504876788287254532"}/>
       </div>
     </div>
   );
