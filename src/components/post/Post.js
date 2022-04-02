@@ -9,6 +9,7 @@ import { format } from "timeago.js";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useForkRef } from "@mui/material";
 
 export default function Post({ post, handleDeleteSubmit }) {
   const [like, setLike] = useState(post && post.likes ? post.likes.length : 0);
@@ -22,10 +23,10 @@ export default function Post({ post, handleDeleteSubmit }) {
   const [img, setImg] = useState([]);
   const [retweets, setRetweets] = useState([]);
   const [likes, setLikes] = useState([]);
-
-  const [edit, setEdit] = useState(false)
-
+  const [edit, setEdit] = useState(false);
+  const [postContent, setPostContent] = useState(post.post);
   const uf = useContext(AuthContext);
+
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -50,11 +51,11 @@ export default function Post({ post, handleDeleteSubmit }) {
 
   // <------------------ LAST PART
 
-  let handleEditSubmit = async (e) => {
-    e.preventDefault();
+  let handleEditSubmit = async () => {
     console.log("the edit button was hit!");
+    setEdit(true);
     let postToEdit = await fetch(
-      process.env.REACT_APP_BACKEND_SERVER + `/post/${post._id}/update`,
+      process.env.REACT_APP_BACKEND_SERVER + `/post/${post._id}/update/`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json", credentials: "include" },
@@ -64,11 +65,10 @@ export default function Post({ post, handleDeleteSubmit }) {
           retweets: retweets,
           likes: likes,
         }),
-      }
+      },
     );
     let updatedPost = await postToEdit.json();
     console.log(updatedPost);
-    navigate("/");
   };
 
   // <------------------ LAST PART
