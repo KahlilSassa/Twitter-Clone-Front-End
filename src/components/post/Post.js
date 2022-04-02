@@ -25,6 +25,7 @@ export default function Post({ post, handleDeleteSubmit }) {
   const [likes, setLikes] = useState([]);
   const [edit, setEdit] = useState(false);
   const [postContent, setPostContent] = useState(post.post);
+
   const uf = useContext(AuthContext);
 
   let navigate = useNavigate();
@@ -47,13 +48,10 @@ export default function Post({ post, handleDeleteSubmit }) {
     setIsRetweet(!isRetweet);
   };
 
- 
-
   // <------------------ LAST PART
 
   let handleEditSubmit = async () => {
     console.log("the edit button was hit!");
-    setEdit(true);
     let postToEdit = await fetch(
       process.env.REACT_APP_BACKEND_SERVER + `/post/${post._id}/update/`,
       {
@@ -65,13 +63,25 @@ export default function Post({ post, handleDeleteSubmit }) {
           retweets: retweets,
           likes: likes,
         }),
-      },
+      }
     );
     let updatedPost = await postToEdit.json();
+    setEdit(false)
+
     console.log(updatedPost);
   };
 
   // <------------------ LAST PART
+
+// WRITE A FUNCTION TO HADNELE EDIT CLICK
+
+let handleEditClick = () => {
+  setEdit(true);
+
+}
+ 
+  // <------------------ LAST PART
+
 
   return (
     <div className="post">
@@ -85,39 +95,57 @@ export default function Post({ post, handleDeleteSubmit }) {
             <span className="postDate">{format(post.createdAt)}</span>
           </div>
           <div className="postTopRight">
-            <ModeEditIcon onClick={handleEditSubmit} />
+            <ModeEditIcon onClick={handleEditClick}/>
             <ClearIcon onClick={() => handleDeleteSubmit(post._id)} />
           </div>
         </div>
 
         <div className="postCenter">
+          <div className="postCenter">
+            {edit ? (
+              <form
+                onChange={(e) => {
+                  setPs(e.target.value);
+                }}
+              >
+                {/* <span className="postText"> {post.post}</span> */}
+                <input 
+                  type="text"
+                  value={postContent}
+                  onChange={(e) => setPostContent(e.target.value)}
+                /><button onClick={handleEditSubmit}>
+                  send
+                </button>
+              </form>
+            ) : (
+              <div>
+                <span className="postText"> {post.post}</span>
+              </div>
+            )}
 
-
-
-          <form onChange={(e) => {
+            {/* <form onChange={(e) => {
               setPs(e.target.value);}}>
             <span className="postText">{post.post}</span>
-          </form>
-
-
-          <img className="postImg" src={post.img} alt="" />
-        </div>
-
-        <div className="postBottom">
-          <div className="postBottomLeft">
-            <RepeatRoundedIcon onClick={retweetHandler} />
-            <span className="postRetweetCounter">
-              {retweet} people retweeted
-            </span>
+          </form> */}
+            <img className="postImg" src={post.img} alt="" />
           </div>
 
-          <div className="postBottomCenter">
-            <FavoriteBorderIcon onClick={likeHandler} />
-            <span className="postLikeCounter">{like} people like it</span>
-          </div>
+          <div className="postBottom">
+            <div className="postBottomLeft">
+              <RepeatRoundedIcon onClick={retweetHandler} />
+              <span className="postRetweetCounter">
+                {retweet} people retweeted
+              </span>
+            </div>
 
-          <div className="postBottomRight">
-            <span className="postCommentText">{post.comment} comments</span>
+            <div className="postBottomCenter">
+              <FavoriteBorderIcon onClick={likeHandler} />
+              <span className="postLikeCounter">{like} people like it</span>
+            </div>
+
+            <div className="postBottomRight">
+              <span className="postCommentText">{post.comment} comments</span>
+            </div>
           </div>
         </div>
       </div>
