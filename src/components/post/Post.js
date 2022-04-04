@@ -11,7 +11,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useForkRef } from "@mui/material";
 
-export default function Post({ post, handleDeleteSubmit }) {
+export default function Post({ post, handleDeleteSubmit, fetchPosts }) {
   const [like, setLike] = useState(post && post.likes ? post.likes.length : 0);
   const [isLiked, setIsLiked] = useState(false);
   const [retweet, setRetweet] = useState(
@@ -19,9 +19,9 @@ export default function Post({ post, handleDeleteSubmit }) {
   );
   const [isRetweet, setIsRetweet] = useState(false);
   const [user, setUser] = useState({});
-  const [ps, setPs] = useState([]);
-  const [img, setImg] = useState([]);
-  const [retweets, setRetweets] = useState([]);
+  // const [ps, setPs] = useState([]);
+  // const [img, setImg] = useState([]);
+  // const [retweets, setRetweets] = useState([]);
   const [likes, setLikes] = useState([]);
   const [edit, setEdit] = useState(false);
   const [postContent, setPostContent] = useState(post.post);
@@ -50,38 +50,42 @@ export default function Post({ post, handleDeleteSubmit }) {
 
   // <------------------ LAST PART
 
-  let handleEditSubmit = async () => {
+  let handleEditSubmit = async (e) => {
+    e.preventDefault()
     console.log("the edit button was hit!");
     let postToEdit = await fetch(
       process.env.REACT_APP_BACKEND_SERVER + `/post/${post._id}/update/`,
+
       {
         method: "PUT",
         headers: { "Content-Type": "application/json", credentials: "include" },
         body: JSON.stringify({
           userId: uf.user._id,
-          posts: ps,
-          retweets: retweets,
-          likes: likes,
+          post: postContent,
+          // retweets: retweets,
+          // likes: likes,
         }),
       }
     );
-    let updatedPost = await postToEdit.json();
-    setEdit(false)
+    // let updatedPost = await postToEdit.json();
+      console.log(uf)
+    if (postToEdit.status === 200) {
+      fetchPosts(uf);
+      // setEdit(false);
+    }
 
-    console.log(updatedPost);
+    // console.log(updatedPost);
   };
 
   // <------------------ LAST PART
 
-// WRITE A FUNCTION TO HADNELE EDIT CLICK
+  // WRITE A FUNCTION TO HADNELE EDIT CLICK
 
-let handleEditClick = () => {
-  setEdit(true);
+  let handleEditClick = () => {
+    setEdit(true);
+  };
 
-}
- 
   // <------------------ LAST PART
-
 
   return (
     <div className="post">
@@ -95,7 +99,7 @@ let handleEditClick = () => {
             <span className="postDate">{format(post.createdAt)}</span>
           </div>
           <div className="postTopRight">
-            <ModeEditIcon onClick={handleEditClick}/>
+            <ModeEditIcon onClick={handleEditClick} />
             <ClearIcon onClick={() => handleDeleteSubmit(post._id)} />
           </div>
         </div>
@@ -104,18 +108,18 @@ let handleEditClick = () => {
           <div className="postCenter">
             {edit ? (
               <form
-                onChange={(e) => {
-                  setPs(e.target.value);
-                }}
+                // onChange={(e) => {
+                //   setPostContent(e.target.value);
+                // }}
               >
                 {/* <span className="postText"> {post.post}</span> */}
-                <input 
+                <input
                   type="text"
                   value={postContent}
                   onChange={(e) => setPostContent(e.target.value)}
-                /><button onClick={handleEditSubmit}>
-                  send
-                </button>
+
+                />
+                <button onClick={handleEditSubmit}>send</button>
               </form>
             ) : (
               <div>
