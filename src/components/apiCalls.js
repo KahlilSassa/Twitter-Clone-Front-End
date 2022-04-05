@@ -6,7 +6,7 @@ export const loginCall = async (userCredential, dispatch, ) => {
     const res = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER}/auth/login`, 
     userCredential, 
      {headers: {
-      'Access-Control-Allow-Origin': '*',
+      "Content-Type": "application/json", credentials: "include",
   }},
     );
     dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
