@@ -31,7 +31,7 @@ export default function Share({ setPosts }) {
     try {
       axios
         .post(
-          `${process.env.REACT_APP_BACKEND_SERVER}/post`,
+          `${process.env.REACT_APP_BACKEND_SERVER}post`,
           {
             userId: user.user._id,
             post: post.current.value,
